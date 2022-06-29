@@ -1,3 +1,5 @@
+import basicTable from './testTable.js'
+
 function App() {
   return (
     <div className="wrapper clear">
@@ -18,7 +20,8 @@ function App() {
 
         {
           <div className="card">
-            BasicTable
+            {basicTable()}
+
             {/*             <img src="" alt=""></img>
             <p></p>
             <div>
