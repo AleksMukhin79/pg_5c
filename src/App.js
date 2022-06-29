@@ -1,4 +1,4 @@
-import basicTable from './testTable.js'
+import StickyHeadTable from './testTable.js'
 
 function App() {
   return (
@@ -18,23 +18,7 @@ function App() {
 
         <div className="card"></div>
 
-        {
-          <div className="card">
-            {basicTable()}
-
-            {/*             <img src="" alt=""></img>
-            <p></p>
-            <div>
-              <div>
-                <span>Участок:</span>
-                <b>Таб.номер</b>
-              </div>
-              <button>
-                <img src="" alt=""></img>
-              </button>
-            </div> */}
-          </div>
-        }
+        {<div className="card">{StickyHeadTable()}</div>}
       </div>
     </div>
   )
