@@ -1,6 +1,14 @@
+import * as React from 'react'
 import StickyHeadTable from './testTable.js'
 
 function App() {
+  const [searchValue, setSearchValue] = React.useState('')
+
+  const onChangeSearchInput = (event) => {
+    setSearchValue(event.target.value)
+    //StickyHeadTable(searchValue)
+  }
+
   return (
     <div className="wrapper clear">
       <header className="d-flex justify-between p-40">
@@ -14,11 +22,23 @@ function App() {
       </header>
 
       <div className="content p-40">
-        <h1>Все нарушения</h1>
+        <div className="d-flex align-center justify-between mb-40">
+          <h1>
+            {searchValue
+              ? `Поиск по участку: "${searchValue}"`
+              : 'Все нарушения'}{' '}
+          </h1>
+          <div className="search-block d-flex">
+            <img src="/img/search.svg" alt="search"></img>
+            <input
+              onChange={onChangeSearchInput}
+              value={searchValue}
+              placeholder="Поиск... "
+            />
+          </div>
+        </div>
 
-        <div className="card"></div>
-
-        {<div className="card">{StickyHeadTable()}</div>}
+        <div className="card">{StickyHeadTable(searchValue)}</div>
       </div>
     </div>
   )

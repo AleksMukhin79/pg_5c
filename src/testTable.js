@@ -9,55 +9,104 @@ import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
 
 const columns = [
-  { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
+  { id: 'code', label: 'Код', minWidth: 100 },
+  { id: 'name', label: 'Участок', minWidth: 170 },
   {
-    id: 'population',
-    label: 'Population',
+    id: 'date',
+    label: 'Дата',
     minWidth: 170,
     align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
+    //format: (value) => value.toLocaleString('en-US'),
   },
   {
-    id: 'size',
-    label: 'Size\u00a0(km\u00b2)',
+    id: 'coordinates',
+    label: 'Координаты',
     minWidth: 170,
     align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
+    //format: (value) => value.toLocaleString('en-US'),
   },
   {
-    id: 'density',
-    label: 'Density',
+    id: 'fio',
+    label: 'Ф.И.О.',
     minWidth: 170,
     align: 'right',
-    format: (value) => value.toFixed(2),
+    //format: (value) => value.toFixed(2),
   },
 ]
 
-function createData(name, code, population, size) {
-  const density = population / size
-  return { name, code, population, size, density }
+function createData(code, name, date, coordinates, fio) {
+  return { code, name, date, coordinates, fio }
 }
 
 const rows = [
-  createData('India', 'IN', 1324171354, 3287263),
-  createData('China', 'CN', 1403500365, 9596961),
-  createData('Italy', 'IT', 60483973, 301340),
-  createData('United States', 'US', 327167434, 9833520),
-  createData('Canada', 'CA', 37602103, 9984670),
-  createData('Australia', 'AU', 25475400, 7692024),
-  createData('Germany', 'DE', 83019200, 357578),
-  createData('Ireland', 'IE', 4857000, 70273),
-  createData('Mexico', 'MX', 126577691, 1972550),
-  createData('Japan', 'JP', 126317000, 377973),
-  createData('France', 'FR', 67022000, 640679),
-  createData('United Kingdom', 'GB', 67545757, 242495),
-  createData('Russia', 'RU', 146793744, 17098246),
-  createData('Nigeria', 'NG', 200962417, 923768),
-  createData('Brazil', 'BR', 210147125, 8515767),
+  createData(
+    101,
+    'Сборочно-сварочный участок по изготовлению корпусов парогенераторов',
+    '30.06.2022',
+    '123-456',
+    'Петров П.П.'
+  ),
+  createData(
+    102,
+    'Сборочно-сварочный участок по изготовлению днищ и обечаек',
+    '30.06.2022',
+    '123-456',
+    'Петров П.П.'
+  ),
+  createData(
+    103,
+    'Сборочно-сварочный участок по изготовлению системы опор',
+    '30.06.2022',
+    '123-456',
+    'Петров П.П.'
+  ),
+  createData(
+    104,
+    'Сборочно-сварочный участок набивки и внутрикорпусных устройств',
+    '30.06.2022',
+    '123-456',
+    'Петров П.П.'
+  ),
+  createData(
+    105,
+    'Участок вакуумных и гидравлических испытаний парогенераторов',
+    '30.06.2022',
+    '123-456',
+    'Петров П.П.'
+  ),
+  createData(106, 'Участок гибки труб', '30.06.2022', '123-456', 'Иванов И.И.'),
+  createData(107, 'Участок гибки труб', '30.06.2022', '123-456', 'Иванов И.И.'),
+  createData(
+    108,
+    'Механический участок расточных станков',
+    '30.06.2022',
+    '123-456',
+    'Петров П.П.'
+  ),
+  createData(
+    109,
+    'Механический участок карусельных станков',
+    '30.06.2022',
+    '123-456',
+    'Петров П.П.'
+  ),
+  createData(
+    110,
+    'Механический участок средних станков',
+    '30.06.2022',
+    '123-456',
+    'Петров П.П.'
+  ),
+  createData(
+    111,
+    'Сборочно-сварочный участок по изготовлению обечаек парогенераторов',
+    '30.06.2022',
+    '123-456',
+    'Петров П.П.'
+  ),
 ]
 
-export default function StickyHeadTable() {
+export default function StickyHeadTable(props) {
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
 
@@ -88,7 +137,14 @@ export default function StickyHeadTable() {
             </TableRow>
           </TableHead>
           <TableBody>
+            {console.log(props)}
             {rows
+              .filter((row) =>
+                (row.name + row.code)
+                  .toString()
+                  .toLowerCase()
+                  .includes(props.toString().toLowerCase())
+              )
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
