@@ -1,4 +1,8 @@
 import * as React from 'react'
+
+import { Route } from 'react-router-dom'
+import Violation from './pages/Violation.js'
+
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -119,6 +123,12 @@ export default function StickyHeadTable(props) {
     setPage(0)
   }
 
+  const onClickRow = (event) => {
+    ;<Route path="/Violation" exact>
+      <Violation />
+    </Route>
+  }
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -137,7 +147,6 @@ export default function StickyHeadTable(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {console.log(props)}
             {rows
               .filter((row) =>
                 (row.name + row.code)
@@ -148,7 +157,13 @@ export default function StickyHeadTable(props) {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                  <TableRow
+                    onClick={() => onClickRow()}
+                    hover
+                    role="checkbox"
+                    tabIndex={-1}
+                    key={row.code}
+                  >
                     {columns.map((column) => {
                       const value = row[column.id]
                       return (

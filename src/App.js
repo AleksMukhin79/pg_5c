@@ -1,45 +1,34 @@
-import * as React from 'react'
-import StickyHeadTable from './testTable.js'
+import React from 'react'
+import Header from './components/Header.js'
+import Home from './pages/Home.js'
+import Violation from './pages/Violation.js'
+
+import { Route } from 'react-router-dom'
 
 function App() {
   const [searchValue, setSearchValue] = React.useState('')
 
   const onChangeSearchInput = (event) => {
     setSearchValue(event.target.value)
-    //StickyHeadTable(searchValue)
   }
 
   return (
     <div className="wrapper clear">
-      <header className="d-flex justify-between p-40">
-        <div className="d-flex align-center">
-          <img width={40} height={40} src="img/logo.png" alt="Logotype" />
-          <div className="headerInfo">
-            <h3 className="text-uppercase">Система 5С на производстве</h3>
-            <p className="opacity-5">поиск выявленных нарушений</p>
-          </div>
-        </div>
-      </header>
+      <Header />
 
-      <div className="content p-40">
-        <div className="d-flex align-center justify-between mb-40">
-          <h1>
-            {searchValue
-              ? `Поиск по участку: "${searchValue}"`
-              : 'Все нарушения'}{' '}
-          </h1>
-          <div className="search-block d-flex">
-            <img src="/img/search.svg" alt="search"></img>
-            <input
-              onChange={onChangeSearchInput}
-              value={searchValue}
-              placeholder="Поиск... "
-            />
-          </div>
-        </div>
+      <Route path="/test">это текст для проверки работы роутера</Route>
 
-        <div className="card">{StickyHeadTable(searchValue)}</div>
-      </div>
+      <Route path="/" exact>
+        <Home
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+          onChangeSearchInput={onChangeSearchInput}
+        />
+      </Route>
+
+      <Route path="/Violation" exact>
+        <Violation />
+      </Route>
     </div>
   )
 }
