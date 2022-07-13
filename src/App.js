@@ -1,9 +1,11 @@
 import React from 'react'
+import {  Routes, Route, } from "react-router-dom";
+
 import Header from './components/Header.js'
 import Home from './pages/Home.js'
 import Violation from './pages/Violation.js'
 
-import { Route } from 'react-router-dom'
+
 
 function App() {
   const [searchValue, setSearchValue] = React.useState('')
@@ -15,20 +17,26 @@ function App() {
   return (
     <div className="wrapper clear">
       <Header />
+      <Routes>
 
-      <Route path="/test">это текст для проверки работы роутера</Route>
-
-      <Route path="/" exact>
-        <Home
+        <Route path="/" element={<Home
           searchValue={searchValue}
           setSearchValue={setSearchValue}
           onChangeSearchInput={onChangeSearchInput}
-        />
-      </Route>
+        />}> 
+        </Route>
 
-      <Route path="/Violation" exact>
-        <Violation />
-      </Route>
+        <Route path="/violation" exact
+          element={<Violation />}>
+        </Route>
+
+        <Route path="/test" exact
+          element={"это текст для проверки работы роутера"}>
+        </Route>
+
+
+
+      </Routes>
     </div>
   )
 }

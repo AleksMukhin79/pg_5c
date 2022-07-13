@@ -25,7 +25,6 @@ function Home({ searchValue, setSearchValue, onChangeSearchInput }) {
             onChange={onChangeSearchInput}
             value={searchValue}
             placeholder="Поиск... "
-            defaultValue=""
           />
         </div>
       </div>
