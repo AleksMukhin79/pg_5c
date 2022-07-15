@@ -30,12 +30,6 @@ function App() {
           element={<Violation />}>
         </Route>
 
-        <Route path="/test" exact
-          element={"это текст для проверки работы роутера"}>
-        </Route>
-
-
-
       </Routes>
     </div>
   )

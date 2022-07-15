@@ -1,8 +1,6 @@
 import * as React from 'react'
 
-import { Route } from 'react-router-dom'
-import Violation from './pages/Violation.js'
-
+import { useNavigate } from 'react-router-dom';
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -13,104 +11,36 @@ import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
 
 const columns = [
-  { id: 'code', label: 'Код', minWidth: 100 },
-  { id: 'name', label: 'Участок', minWidth: 170 },
-  {
-    id: 'date',
-    label: 'Дата',
-    minWidth: 170,
-    align: 'right',
-    //format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'coordinates',
-    label: 'Координаты',
-    minWidth: 170,
-    align: 'right',
-    //format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'fio',
-    label: 'Ф.И.О.',
-    minWidth: 170,
-    align: 'right',
-    //format: (value) => value.toFixed(2),
-  },
-]
+  { id: '1', field: 'id', label: 'Код', minWidth: 100 },
+  { id: '2', field: 'deps_name', label: 'Участок', minWidth: 170 },
+  { id: '3', field: 'createdAt', label: 'Дата', minWidth: 170, align: 'right', },
+  { id: '4', field: 'coordinates', label: 'Координаты', minWidth: 170, align: 'right', },
+  { id: '5', field: 'violator', label: 'Ф.И.О.', minWidth: 170, align: 'right', },]
 
-function createData(code, name, date, coordinates, fio) {
-  return { code, name, date, coordinates, fio }
-}
 
-const rows = [
-  createData(
-    101,
-    'Сборочно-сварочный участок по изготовлению корпусов парогенераторов',
-    '30.06.2022',
-    '123-456',
-    'Петров П.П.'
-  ),
-  createData(
-    102,
-    'Сборочно-сварочный участок по изготовлению днищ и обечаек',
-    '30.06.2022',
-    '123-456',
-    'Петров П.П.'
-  ),
-  createData(
-    103,
-    'Сборочно-сварочный участок по изготовлению системы опор',
-    '30.06.2022',
-    '123-456',
-    'Петров П.П.'
-  ),
-  createData(
-    104,
-    'Сборочно-сварочный участок набивки и внутрикорпусных устройств',
-    '30.06.2022',
-    '123-456',
-    'Петров П.П.'
-  ),
-  createData(
-    105,
-    'Участок вакуумных и гидравлических испытаний парогенераторов',
-    '30.06.2022',
-    '123-456',
-    'Петров П.П.'
-  ),
-  createData(106, 'Участок гибки труб', '30.06.2022', '123-456', 'Иванов И.И.'),
-  createData(107, 'Участок гибки труб', '30.06.2022', '123-456', 'Иванов И.И.'),
-  createData(
-    108,
-    'Механический участок расточных станков',
-    '30.06.2022',
-    '123-456',
-    'Петров П.П.'
-  ),
-  createData(
-    109,
-    'Механический участок карусельных станков',
-    '30.06.2022',
-    '123-456',
-    'Петров П.П.'
-  ),
-  createData(
-    110,
-    'Механический участок средних станков',
-    '30.06.2022',
-    '123-456',
-    'Петров П.П.'
-  ),
-  createData(
-    111,
-    'Сборочно-сварочный участок по изготовлению обечаек парогенераторов',
-    '30.06.2022',
-    '123-456',
-    'Петров П.П.'
-  ),
-]
 
 export default function StickyHeadTable(props) {
+
+  //const tableData = rows.reduce((acc, item) => [...acc, {...item, deps_name: item.deps.name}], [])
+
+  const [rows, setItems] = React.useState([]);
+
+  const tableData = rows.reduce((acc, item) => {
+    const data = { ...item, deps_name: item.deps.name, deps_id: item.deps.id }
+    return [...acc, data]
+  }, [])
+
+
+  React.useEffect(() => {
+    fetch('http://localhost:4444/violations/')
+      .then((res) => {
+        return res.json();
+      }).then(json => {
+        setItems(json)
+      })
+  }, []
+  )
+
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
 
@@ -122,11 +52,13 @@ export default function StickyHeadTable(props) {
     setRowsPerPage(+event.target.value)
     setPage(0)
   }
+  const navigate = useNavigate();
+  const onClickRow = () => {
+    navigate("/Violation");
+  }
 
-  const onClickRow = (event) => {
-    ;<Route path="/Violation" exact>
-      <Violation />
-    </Route>
+  if (rows.length) {
+    console.log(tableData)
   }
 
   return (
@@ -147,9 +79,9 @@ export default function StickyHeadTable(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
+            {tableData
               .filter((row) =>
-                (row.name + row.code)
+                (row.id + row.deps_name)
                   .toString()
                   .toLowerCase()
                   .includes(props.toString().toLowerCase())
@@ -157,15 +89,9 @@ export default function StickyHeadTable(props) {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <TableRow
-                    onClick={() => onClickRow()}
-                    hover
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row.code}
-                  >
+                  <TableRow onClick={() => onClickRow()} hover role="checkbox" tabIndex={-1} key={row.id}>
                     {columns.map((column) => {
-                      const value = row[column.id]
+                      const value = row[column.field]
                       return (
                         <TableCell key={column.id} align={column.align}>
                           {column.format && typeof value === 'number'
